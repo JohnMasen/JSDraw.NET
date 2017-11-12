@@ -47,6 +47,7 @@ namespace UWPTest
         {
             //await testLowApi();
             JSDraw.NET.JSDraw obj = new JSDraw.NET.JSDraw();
+            obj.WorkPath = "Scripts";
             obj.Load(loadScript("test1.js"));
             obj.Run();
             await renderResult(obj.Output.First().image);
@@ -63,18 +64,7 @@ namespace UWPTest
         private async System.Threading.Tasks.Task testLowApi()
         {
             var img = im.CreateImage(640, 480, false);
-            im.SetBrushColor("#ffffff");
-            im.Fill(img);
-            im.SetBrushColor("#000000");
-            var points = new PointF[] { new PointF(r.Next(0, 640), r.Next(0, 480)), new PointF(r.Next(0, 640), r.Next(0, 480)) };
-            perfTest("drawLine", () => im.DrawLines(img, points));
-            var p1 = im.LoadImage("arrow.jpg");
-            perfTest("drawImg", () => im.DrawImage(img, p1, new SixLabors.Primitives.Size(100, 100), SixLabors.Primitives.Point.Empty));
-
-            im.SetImageBrush(p1);
-            im.SetBrushWidth(20);
-            im.DrawLines(img, points);
-
+            
             im.SetOutput(img, string.Empty);
             var output = im.GetOutput().First().image;
             stream = new MemoryStream();

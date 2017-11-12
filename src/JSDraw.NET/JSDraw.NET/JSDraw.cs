@@ -105,8 +105,11 @@ namespace JSDraw.NET
                     jsvalue.SetFunction<string, int>("load", obj.LoadImage);
                     jsvalue.SetMethod<int>("blackWhite", obj.BlackWhite);
                     jsvalue.SetMethod<int, int, int>("resize", obj.Resize);
-                    jsvalue.SetMethod<int, int, Size, Point>("drawImage", obj.DrawImage);
+                    jsvalue.SetMethod<int, int, Size, Point,float>("drawImage", obj.DrawImage);
                     jsvalue.SetMethod<int, string>("setOutput", obj.SetOutput);
+                    jsvalue.SetFunction<string, int>("load", obj.LoadImage);
+                    jsvalue.SetMethod<string,int>("setFont", obj.SetFont);
+                    jsvalue.SetMethod<int, string, PointF>("drawText", obj.DrawText);
                 });
         }
         private void initJSImageManager()

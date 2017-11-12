@@ -28,16 +28,21 @@ namespace JSDraw.NET
             getImageBuffer(id).image.Mutate(ipc => ipc.Fill(currentBrush));
         }
 
-        public void DrawImage(int id,int textureID,Size size ,Point point)
+        public void DrawImage(int id,int textureID,Size size ,Point point,float alpha)
         {
             var target = getImageBuffer(textureID).image;
-            getImageBuffer(id).image.Mutate(ctx => ctx.DrawImage(target, 1, size, point));
+            getImageBuffer(id).image.Mutate(ctx => ctx.DrawImage(target, alpha, size, point));
         }
 
         public void SetImageBrush(int id)
         {
             ImageBrush<Rgba32> brush = new ImageBrush<Rgba32>(getImageBuffer(id).image);
             currentBrush = brush;
+        }
+
+        public void DrawText(int id, string text,PointF location)
+        {
+            getImageBuffer(id).image.Mutate(ctx => ctx.DrawText(text, currentFont, currentBrush, location));
         }
     }
 }

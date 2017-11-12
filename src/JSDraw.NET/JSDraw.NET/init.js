@@ -31,7 +31,21 @@
         _manager.fill(this.id);
     }
 
-    drawImage(texture, size, point) {
-        _manager.drawImage(this.id, texture.id, size, point);
+    drawImage(texture, position, size,  alpha) {
+        alpha = alpha || 1;
+        size = size || { "width": texture.width, "height": texture.height };
+        position = position || { "x": 0, "y": 0 };
+        _manager.drawImage(this.id, texture.id, size, position,alpha);
     }
+    load(path) {
+        var id = _manager.load(path);
+        return new JSImage(id);
+    }
+    setFont(path,size) {
+        _manager.setFont(path,size);
+    }
+    drawText(text, position) {
+        _manager.drawText(this.id, text, position);
+    }
+    
 }

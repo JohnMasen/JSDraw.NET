@@ -6,6 +6,7 @@ using System.Numerics;
 using SixLabors.Primitives;
 using SixLabors.ImageSharp.Drawing.Brushes;
 using SixLabors.ImageSharp.Drawing.Pens;
+using SixLabors.Fonts;
 
 namespace JSDraw.NET
 {
@@ -14,6 +15,9 @@ namespace JSDraw.NET
         private int currentID;
         private IBrush<Rgba32> currentBrush;
         private float penWidth = 1;
+        private Font currentFont;
+        private FontCollection fc = new FontCollection();
+
         public class ImageBuffer
         {
             public string tag;
@@ -112,7 +116,12 @@ namespace JSDraw.NET
             return items[id].image.Height;
         }
 
-        
+        public void SetFont(string name,int size)
+        {
+            string path = System.IO.Path.Combine(ImagePath, name);
+            var family=fc.Install(path);
+            currentFont = family.CreateFont(size);
+        }
 
         
 
