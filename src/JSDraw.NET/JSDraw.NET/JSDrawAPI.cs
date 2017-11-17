@@ -17,16 +17,16 @@ namespace JSDraw.NET
             public bool IsOutput { get; set; }
             public string Name { get; set; }
         }
-        public class OnLoadEventArgs:EventArgs
+        public class OnLoadEventArgs<T>:EventArgs
         {
             public string Path { get; private set; }
-            public Image<Rgba32> Image { get; set; }
+            public T Item { get; set; }
             public OnLoadEventArgs(string path)
             {
                 Path = path;
             }
         }
-        public event EventHandler<OnLoadEventArgs> OnLoadImage;
+        public event EventHandler<OnLoadEventArgs<Image<Rg32>>> OnLoadImage;
         private ObjectManager<ImgInfo> manager = new ObjectManager<ImgInfo>();
         private int add<T>(T obj,bool isPersistent=false,ImgInfo info=null)
         {

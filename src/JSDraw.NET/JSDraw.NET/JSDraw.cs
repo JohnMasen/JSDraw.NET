@@ -142,6 +142,8 @@ namespace JSDraw.NET
                     binding.SetMethod<int, string>("setOutput", obj.SetOutput);
                     binding.SetMethod<int, int, int, float, Size, Point>("drawImage", obj.DrawImage);
                     binding.SetFunction<int, Size>("getImageSize", obj.GetImageSize);
+                    binding.SetMethod<string>("installFont", obj.InstallFont);
+                    binding.SetFunction<string, float, int>("getFont", obj.GetFont);
                 });
             
         }

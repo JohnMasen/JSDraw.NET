@@ -130,6 +130,18 @@ class JSSolidBrush extends BrushBase {
         this.color = color;
     }
 }
+class JSFont extends idObject {
+    public readonly family: string;
+    public readonly size: number;
+    public static Install(path: string) {
+        _api.installFont(path);
+    }
+    constructor(family: string, size: number) {
+        super(_api.getFont(family, size));
+        this.family = family;
+        this.size = size;
+    }
+}
 
 class JSImage extends idObject {
     public static Load(path: string, isPersistent: boolean=false): JSImage {

@@ -53,6 +53,12 @@ declare class JSSolidBrush extends BrushBase {
     readonly color: JSColor;
     constructor(color: JSColor);
 }
+declare class JSFont extends idObject {
+    readonly family: string;
+    readonly size: number;
+    static Install(path: string): void;
+    constructor(family: string, size: number);
+}
 declare class JSImage extends idObject {
     static Load(path: string, isPersistent?: boolean): JSImage;
     static Create(width: number, height: number, isPersistent?: boolean): JSImage;
