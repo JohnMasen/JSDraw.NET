@@ -27,7 +27,6 @@ namespace UWPTest
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        ImageManager im;
         MemoryStream stream = new MemoryStream();
         Random r = new Random();
         WriteableBitmap s = new WriteableBitmap(640, 480);
@@ -40,7 +39,6 @@ namespace UWPTest
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            im = new ImageManager();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -48,9 +46,9 @@ namespace UWPTest
             //await testLowApi();
             JSDraw.NET.JSDraw obj = new JSDraw.NET.JSDraw();
             obj.WorkPath = "Scripts";
-            obj.Load(loadScript("test1.js"));
+            obj.Load(loadScript("test2.js"));
             obj.Run();
-            await renderResult(obj.Output.First().image);
+            await renderResult(obj.GetOutput().First().Item);
         }
         private async Task renderResult(SixLabors.ImageSharp.Image<Rgba32> img)
         {
@@ -61,20 +59,20 @@ namespace UWPTest
             imgResult.Source = bii;
         }
 
-        private async System.Threading.Tasks.Task testLowApi()
-        {
-            var img = im.CreateImage(640, 480, false);
+        //private async System.Threading.Tasks.Task testLowApi()
+        //{
+        //    var img = im.CreateImage(640, 480, false);
             
-            im.SetOutput(img, string.Empty);
-            var output = im.GetOutput().First().image;
-            stream = new MemoryStream();
-            output.SaveAsBmp(stream);
-            stream.Position = 0;
-            var bii = await BitmapFactory.FromStream(stream);
-            imgResult.Source = bii;
+        //    im.SetOutput(img, string.Empty);
+        //    var output = im.GetOutput().First().image;
+        //    stream = new MemoryStream();
+        //    output.SaveAsBmp(stream);
+        //    stream.Position = 0;
+        //    var bii = await BitmapFactory.FromStream(stream);
+        //    imgResult.Source = bii;
 
-            im.Clear();
-        }
+        //    im.Clear();
+        //}
 
         private void perfTest(string name,Action action)
         {

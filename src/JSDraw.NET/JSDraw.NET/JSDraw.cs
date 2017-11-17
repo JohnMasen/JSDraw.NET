@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using ChakraCore.NET;
 using SixLabors.Primitives;
+using SixLabors.ImageSharp;
+using static JSDraw.NET.JSDrawAPI;
 
 namespace JSDraw.NET
 {
@@ -10,31 +12,50 @@ namespace JSDraw.NET
     {
         ChakraRuntime runtime;
         ChakraContext context;
-        ImageManager manager;
         public string WorkPath { get; set; } = null;
+        JSDrawAPI api = new JSDrawAPI();
+        public JSDraw()
+        {
+            api.OnLoadImage += Api_OnLoadImage;
+        }
+
+        private void Api_OnLoadImage(object sender, OnLoadEventArgs e)
+        {
+            string path = e.Path;
+            if (!string.IsNullOrWhiteSpace(WorkPath))
+            {
+                path = System.IO.Path.Combine(WorkPath, e.Path);
+            }
+            e.Image=Image.Load<Rgba32>(path);
+        }
+
         public void Load(string script)
         {
-            manager = new ImageManager();
-            manager.ImagePath = WorkPath;
+
+            //manager.ImagePath = WorkPath;
             initJSRuntime();
             injectJSConverter();
-            initJSImageManager();
+            initAPI();
             context.RunScript(script);
             
         }
-        public IEnumerable<ImageManager.ImageBuffer> Output
-        {
-            get
-            {
-                return manager.GetOutput();
-            }
-        }
+        //public IEnumerable<ImageManager.ImageBuffer> Output
+        //{
+        //    get
+        //    {
+        //        return manager.GetOutput();
+        //    }
+        //}
 
         public void Run()
         {
             context.GlobalObject.CallMethod("main");
         }
         
+        public IEnumerable<ManagedItem<Image<Rgba32>, ImgInfo>> GetOutput()
+        {
+            return api.GetOutput();
+        }
 
         private void initJSRuntime()
         {
@@ -45,7 +66,8 @@ namespace JSDraw.NET
             context = runtime.CreateContext(false);
 #endif
             JSRequireLoader.EnableRequire(context, WorkPath);
-            context.RunScript(Properties.Resources.init);
+            var s = Properties.Resources.boot;
+            context.RunScript(Properties.Resources.boot);
         }
 
         private void injectJSConverter()
@@ -91,30 +113,41 @@ namespace JSDraw.NET
                     int h = jsvalue.ReadProperty<int>("height");
                     return new Size(w, h);
                 });
-
-            converter.RegisterProxyConverter<ImageManager>(
-                (jsvalue, obj, node) =>
+            converter.RegisterStructConverter<Rectangle>(
+                (jsvalue, value) =>
                 {
-                    jsvalue.SetFunction<int, int, bool, int>("createImage", obj.CreateImage);
-                    jsvalue.SetMethod<string>("setBrushColor", obj.SetBrushColor);
-                    jsvalue.SetMethod<float>("setBrushWidth", obj.SetBrushWidth);
-                    jsvalue.SetMethod<int>("fill", obj.Fill);
-                    jsvalue.SetMethod<int, IEnumerable<PointF>>("drawLines", obj.DrawLines);
-                    jsvalue.SetFunction<int, int>("getImageWidth", obj.GetImageWidth);
-                    jsvalue.SetFunction<int, int>("getImageHeight", obj.GetImageHeight);
-                    jsvalue.SetFunction<string, int>("load", obj.LoadImage);
-                    jsvalue.SetMethod<int>("blackWhite", obj.BlackWhite);
-                    jsvalue.SetMethod<int, int, int>("resize", obj.Resize);
-                    jsvalue.SetMethod<int, int, Size, Point,float>("drawImage", obj.DrawImage);
-                    jsvalue.SetMethod<int, string>("setOutput", obj.SetOutput);
-                    jsvalue.SetFunction<string, int>("load", obj.LoadImage);
-                    jsvalue.SetMethod<string,int>("setFont", obj.SetFont);
-                    jsvalue.SetMethod<int, string, PointF>("drawText", obj.DrawText);
+                    jsvalue.WriteProperty<int>("x", value.X);
+                    jsvalue.WriteProperty<int>("y", value.Y);
+                    jsvalue.WriteProperty<int>("width", value.Width);
+                    jsvalue.WriteProperty<int>("height", value.Height);
+                },
+                (jsvalue) =>
+                {
+                    return new Rectangle(
+                        jsvalue.ReadProperty<int>("x"),
+                        jsvalue.ReadProperty<int>("y"),
+                        jsvalue.ReadProperty<int>("width"),
+                        jsvalue.ReadProperty<int>("height")
+                        );
                 });
+
+            converter.RegisterProxyConverter<JSDrawAPI>(
+                (binding, obj, node) =>
+                {
+                    binding.SetFunction<int, int, bool, int>("createImage", obj.CreateImage);
+                    binding.SetFunction<string, bool, int>("loadImage", obj.LoadImage);
+                    binding.SetFunction<string, int>("createSolidBrush", obj.CreateSolidBrush);
+                    binding.SetMethod<int,int>("brushFill", obj.BrushFill);
+                    binding.SetMethod<int, int, int, IEnumerable<PointF>>("brushDrawLines", obj.BrushDrawLines);
+                    binding.SetMethod<int, string>("setOutput", obj.SetOutput);
+                    binding.SetMethod<int, int, int, float, Size, Point>("drawImage", obj.DrawImage);
+                    binding.SetFunction<int, Size>("getImageSize", obj.GetImageSize);
+                });
+            
         }
-        private void initJSImageManager()
+        private void initAPI()
         {
-            context.GlobalObject.WriteProperty<ImageManager>("_manager", manager);
+            context.GlobalObject.WriteProperty<JSDrawAPI>("_api", api);
         }
     }
 }

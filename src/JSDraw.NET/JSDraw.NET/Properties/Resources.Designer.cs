@@ -65,24 +65,21 @@ namespace JSDraw.NET.Properties {
         ///   Looks up a localized string similar to class JSImage {
         ///    constructor(id) {
         ///        this.id = id;
-        ///        this.width = _manager.getImageWidth(this.id);
-        ///        this.height = _manager.getImageHeight(this.id);
         ///    }
-        ///    static create(width, height, isPersistent) {
-        ///        isPersistent = isPersistent || false;
-        ///        var id = _manager.createImage(width, height, isPersistent);
-        ///        return new JSImage(id);
+        ///    static Load(path, isPersistent) {
+        ///        return new JSImage(_imageManager.load(path));
         ///    }
-        ///    static load(path) {
-        ///        var id = _manager.load(path);
-        ///        return new JSImage(id);
+        ///    static Create(width, height, isPersistent) {
+        ///        return new JSImage(_imageManager.create(width, height, isPersistent));
         ///    }
-        ///
-        ///    drawLines(poin [rest of string was truncated]&quot;;.
+        ///    DrawPoints(points) {
+        ///    }
+        ///}
+        /////# sourceMappingURL=boot.js.map.
         /// </summary>
-        internal static string init {
+        internal static string boot {
             get {
-                return ResourceManager.GetString("init", resourceCulture);
+                return ResourceManager.GetString("boot", resourceCulture);
             }
         }
     }
