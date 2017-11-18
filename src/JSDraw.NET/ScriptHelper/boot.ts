@@ -141,6 +141,9 @@ class JSFont extends idObject {
         this.family = family;
         this.size = size;
     }
+    MeasureText(text: string): Size {
+        return _api.measureText(this.id, text);
+    }
 }
 
 class JSImage extends idObject {
@@ -177,5 +180,9 @@ class JSImage extends idObject {
         let b: number = blend;
         size = (size) || texture.size;
         _api.drawImage(this.id, texture.id, b, percent, size, location);
+    }
+
+    public DrawText(text: string, font: JSFont,brush:BrushBase,location:Point) {
+        _api.brushDrawText(this.id, text, font.id, brush.id, location);
     }
 }

@@ -7,11 +7,15 @@ using SixLabors.ImageSharp.Drawing.Brushes;
 using SixLabors.Primitives;
 using System.Linq;
 using SixLabors.ImageSharp.PixelFormats;
+using System.IO;
+using SixLabors.Fonts;
 
 namespace JSDraw.NET
 {
     public partial class JSDrawAPI
     {
+
+        public event EventHandler<OnLoadEventArgs<Stream>> OnLoadResource;
         public class ImgInfo
         {
             public bool IsOutput { get; set; }
@@ -26,7 +30,23 @@ namespace JSDraw.NET
                 Path = path;
             }
         }
-        public event EventHandler<OnLoadEventArgs<Image<Rg32>>> OnLoadImage;
+
+        
+        private Stream loadResource(string path)
+        {
+            if (OnLoadResource!=null)
+            {
+                OnLoadEventArgs<Stream> e = new OnLoadEventArgs<Stream>(path);
+                OnLoadResource(this, e);
+                return e.Item;
+            }
+            else
+            {
+                return System.IO.File.Open(path, FileMode.Open);
+            }
+        }
+
+        
         private ObjectManager<ImgInfo> manager = new ObjectManager<ImgInfo>();
         private int add<T>(T obj,bool isPersistent=false,ImgInfo info=null)
         {
@@ -48,17 +68,9 @@ namespace JSDraw.NET
 
         public int LoadImage(string path, bool isPersistent)
         {
-            OnLoadEventArgs args = new OnLoadEventArgs(path);
+            OnLoadEventArgs<Image<Rgba32>> args = new OnLoadEventArgs<Image<Rgba32>>(path);
             Image<Rgba32> img;
-            if (OnLoadImage!=null)
-            {
-                OnLoadImage(this, args);
-                img = args.Image;
-            }
-            else
-            {
-                img = Image.Load<Rgba32>(path);
-            }
+            img = Image.Load<Rgba32>(loadResource(path));
             return add(img, isPersistent,new ImgInfo());
         }
 

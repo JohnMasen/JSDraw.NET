@@ -39,6 +39,7 @@ namespace UWPTest
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            txtScript.Text = loadScript("test2.js");
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -46,7 +47,7 @@ namespace UWPTest
             //await testLowApi();
             JSDraw.NET.JSDraw obj = new JSDraw.NET.JSDraw();
             obj.WorkPath = "Scripts";
-            obj.Load(loadScript("test2.js"));
+            obj.Load(txtScript.Text);
             obj.Run();
             await renderResult(obj.GetOutput().First().Item);
         }

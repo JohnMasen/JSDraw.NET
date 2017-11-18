@@ -16,17 +16,17 @@ namespace JSDraw.NET
         JSDrawAPI api = new JSDrawAPI();
         public JSDraw()
         {
-            api.OnLoadImage += Api_OnLoadImage;
+            api.OnLoadResource += Api_OnLoadResource;
         }
 
-        private void Api_OnLoadImage(object sender, OnLoadEventArgs e)
+        private void Api_OnLoadResource(object sender, OnLoadEventArgs<System.IO.Stream> e)
         {
             string path = e.Path;
             if (!string.IsNullOrWhiteSpace(WorkPath))
             {
                 path = System.IO.Path.Combine(WorkPath, e.Path);
             }
-            e.Image=Image.Load<Rgba32>(path);
+            e.Item= System.IO.File.OpenRead(path);
         }
 
         public void Load(string script)
@@ -113,6 +113,18 @@ namespace JSDraw.NET
                     int h = jsvalue.ReadProperty<int>("height");
                     return new Size(w, h);
                 });
+            converter.RegisterStructConverter<SizeF>(
+                (jsvalue, value) =>
+                {
+                    jsvalue.WriteProperty("width", value.Width);
+                    jsvalue.WriteProperty("height", value.Height);
+                },
+                (jsvalue) =>
+                {
+                    float w = jsvalue.ReadProperty<float>("width");
+                    float h = jsvalue.ReadProperty<float>("height");
+                    return new SizeF(w, h);
+                });
             converter.RegisterStructConverter<Rectangle>(
                 (jsvalue, value) =>
                 {
@@ -144,6 +156,8 @@ namespace JSDraw.NET
                     binding.SetFunction<int, Size>("getImageSize", obj.GetImageSize);
                     binding.SetMethod<string>("installFont", obj.InstallFont);
                     binding.SetFunction<string, float, int>("getFont", obj.GetFont);
+                    binding.SetFunction<int,string, SizeF>("measureText", obj.MeasureText);
+                    binding.SetMethod<int, string, int, int, PointF>("brushDrawText", obj.BrushDrawText);
                 });
             
         }

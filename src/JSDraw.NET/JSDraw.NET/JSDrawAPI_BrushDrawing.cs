@@ -38,5 +38,9 @@ namespace JSDraw.NET
              }
             );
         }
+        public void BrushDrawText(int imgID, string text, int fontID,int brushID,PointF location)
+        {
+            withImage(imgID, ctx => { ctx.DrawText(text, GetFont(fontID), getBrush(brushID), location); });
+        }
     }
 }

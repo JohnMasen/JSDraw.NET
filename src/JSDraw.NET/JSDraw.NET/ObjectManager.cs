@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.IO;
+
 namespace JSDraw.NET
 {
-    public class ObjectManager<TTag> where TTag:class
+    public class ObjectManager<TTag> where TTag : class
     {
         int id = 0;
         internal IDictionary<int, IManaged<TTag>> Items { get; private set; } = new SortedDictionary<int, IManaged<TTag>>();

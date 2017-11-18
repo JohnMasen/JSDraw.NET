@@ -14,20 +14,13 @@ namespace JSDraw.NET
     public partial class JSDrawAPI
     {
         FontCollection fc = new FontCollection();
-        public event EventHandler<OnLoadEventArgs<System.IO.Stream>> OnLoadFont;
+        private Font GetFont(int id)
+        {
+            return manager.GetItem<Font>(id);
+        }
         public void InstallFont(string path)
         {
-            if (OnLoadFont!=null)
-            {
-                var e = new OnLoadEventArgs<System.IO.Stream>(path);
-                OnLoadFont(this,e);
-                e.Item.Position = 0;
-                fc.Install(e.Item);
-            }
-            else
-            {
-                fc.Install(path);
-            }
+            fc.Install(loadResource(path));
         }
 
         public int GetFont(string family,float size)

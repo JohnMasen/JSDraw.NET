@@ -58,6 +58,7 @@ declare class JSFont extends idObject {
     readonly size: number;
     static Install(path: string): void;
     constructor(family: string, size: number);
+    MeasureText(text: string): Size;
 }
 declare class JSImage extends idObject {
     static Load(path: string, isPersistent?: boolean): JSImage;
@@ -71,4 +72,5 @@ declare class JSImage extends idObject {
     Fill(brush: BrushBase): void;
     SetOutput(name?: string): void;
     DrawImage(texture: JSImage, blend?: BlendMode, percent?: number, size?: Size, location?: Point): void;
+    DrawText(text: string, font: JSFont, brush: BrushBase, location: Point): void;
 }

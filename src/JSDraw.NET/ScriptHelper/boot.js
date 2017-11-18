@@ -119,6 +119,9 @@ class JSFont extends idObject {
         this.family = family;
         this.size = size;
     }
+    MeasureText(text) {
+        return _api.measureText(this.id, text);
+    }
 }
 class JSImage extends idObject {
     static Load(path, isPersistent = false) {
@@ -146,6 +149,9 @@ class JSImage extends idObject {
         let b = blend;
         size = (size) || texture.size;
         _api.drawImage(this.id, texture.id, b, percent, size, location);
+    }
+    DrawText(text, font, brush, location) {
+        _api.brushDrawText(this.id, text, font.id, brush.id, location);
     }
 }
 //# sourceMappingURL=boot.js.map

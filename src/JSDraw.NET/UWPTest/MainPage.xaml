@@ -21,7 +21,8 @@
         <Grid x:Name="grdContent" Grid.Row="2" HorizontalAlignment="Stretch" Grid.Column="2"  VerticalAlignment="Stretch">
             <Image x:Name="imgResult" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"/>
         </Grid>
-        
+        <TextBox x:Name="txtScript" Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Grid.RowSpan="1" Text="TextBox" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+
 
     </Grid>
 </Page>
