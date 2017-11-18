@@ -153,5 +153,8 @@ class JSImage extends idObject {
     DrawText(text, font, brush, location) {
         _api.brushDrawText(this.id, text, font.id, brush.id, location);
     }
+    DrawEclipse(drawWith, location, radius) {
+        _api.brushDrawEclipse(this.id, drawWith.brush.id, drawWith.thickness, location, radius);
+    }
 }
 //# sourceMappingURL=boot.js.map

@@ -18,7 +18,7 @@
     JSFont.Install("Boogaloo-Regular.ttf");
     let f = new JSFont("Boogaloo", 24);
     img.DrawText("it works", f, brush_draw, { x: 100, y: 150 });
-
+    img.DrawEclipse({ brush: brush_draw, thickness:1 }, { x: 150, y: 200 }, 100);
     img.SetOutput();
     
  }

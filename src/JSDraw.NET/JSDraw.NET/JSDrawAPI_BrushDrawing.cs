@@ -42,5 +42,9 @@ namespace JSDraw.NET
         {
             withImage(imgID, ctx => { ctx.DrawText(text, GetFont(fontID), getBrush(brushID), location); });
         }
+        public void BrushDrawEclipse(int imgID,int brushID, float thickness, PointF position,float radius)
+        {
+            withImage(imgID, ctx => { ctx.Draw(getBrush(brushID), thickness, new SixLabors.Shapes.EllipsePolygon(position, radius)); });
+        }
     }
 }

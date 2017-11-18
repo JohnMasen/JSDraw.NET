@@ -42,6 +42,10 @@ interface Rectangle {
     width: number;
     height: number;
 }
+interface BrushDraw {
+    brush: BrushBase;
+    thickness: number;
+}
 declare class JSColor {
     readonly hexString: string;
     constructor(hex: string);
@@ -73,4 +77,5 @@ declare class JSImage extends idObject {
     SetOutput(name?: string): void;
     DrawImage(texture: JSImage, blend?: BlendMode, percent?: number, size?: Size, location?: Point): void;
     DrawText(text: string, font: JSFont, brush: BrushBase, location: Point): void;
+    DrawEclipse(drawWith: BrushDraw, location: Point, radius: number): void;
 }

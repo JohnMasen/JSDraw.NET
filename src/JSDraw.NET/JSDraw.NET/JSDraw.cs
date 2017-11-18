@@ -158,6 +158,7 @@ namespace JSDraw.NET
                     binding.SetFunction<string, float, int>("getFont", obj.GetFont);
                     binding.SetFunction<int,string, SizeF>("measureText", obj.MeasureText);
                     binding.SetMethod<int, string, int, int, PointF>("brushDrawText", obj.BrushDrawText);
+                    binding.SetMethod<int, int, float,PointF, float>("brushDrawEclipse", obj.BrushDrawEclipse);
                 });
             
         }

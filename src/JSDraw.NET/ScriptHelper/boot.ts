@@ -109,6 +109,10 @@ interface Rectangle {
     width: number;
     height: number;
 }
+interface BrushDraw {
+    brush: BrushBase;
+    thickness: number;
+}
 
 class JSColor {
     readonly hexString: string;
@@ -162,7 +166,7 @@ class JSImage extends idObject {
     }
 
     public DrawLines({ brush: BrushBase, thickness: number }, points: Point[]);
-    public DrawLines(drawWith: { brush: BrushBase, thickness: number }, points: Point[]) {
+    public DrawLines(drawWith: BrushDraw, points: Point[]) {
         if (drawWith.brush) {
             _api.brushDrawLines(this.id, drawWith.brush.id, drawWith.thickness, points);
         }
@@ -184,5 +188,8 @@ class JSImage extends idObject {
 
     public DrawText(text: string, font: JSFont,brush:BrushBase,location:Point) {
         _api.brushDrawText(this.id, text, font.id, brush.id, location);
+    }
+    public DrawEclipse(drawWith:BrushDraw,location:Point,radius:number) {
+        _api.brushDrawEclipse(this.id, drawWith.brush.id,drawWith.thickness,location, radius);
     }
 }
