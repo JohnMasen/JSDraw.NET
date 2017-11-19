@@ -5,7 +5,31 @@ abstract class idObject {
         this.id = id;
     }
 };
-abstract class BrushBase extends idObject { }
+
+abstract class DrawWith extends idObject {
+    protected _thickness: number;
+    protected _type: DrawWithType;
+    constructor(id: number, thickness: number,  type: DrawWithType) {
+        super(id);
+        this._thickness = thickness;
+        this._type = type;
+    }
+}
+
+abstract class BrushBase extends DrawWith {
+    get Thickness(): number { return this._thickness }
+    set Thickness(value: number) {this._thickness=value}
+    constructor(id: number, thickness: number = 1) {
+        super(id, thickness,  DrawWithType.brush);
+    }
+}
+
+enum DrawWithType {
+    brush = 0,
+    pen = 1
+}
+
+
 
 enum BlendMode {
     //
@@ -109,10 +133,7 @@ interface Rectangle {
     width: number;
     height: number;
 }
-interface BrushDraw {
-    brush: BrushBase;
-    thickness: number;
-}
+
 
 class JSColor {
     readonly hexString: string;
@@ -151,10 +172,10 @@ class JSFont extends idObject {
 }
 
 class JSImage extends idObject {
-    public static Load(path: string, isPersistent: boolean=false): JSImage {
+    public static Load(path: string, isPersistent: boolean = false): JSImage {
         return new JSImage(_api.loadImage(path, isPersistent));
     }
-    public static Create(width: number, height: number, isPersistent: boolean=false): JSImage {
+    public static Create(width: number, height: number, isPersistent: boolean = false): JSImage {
         return new JSImage(_api.createImage(width, height, isPersistent));
     }
 
@@ -165,31 +186,29 @@ class JSImage extends idObject {
         this.size = _api.getImageSize(id);
     }
 
-    public DrawLines({ brush: BrushBase, thickness: number }, points: Point[]);
-    public DrawLines(drawWith: BrushDraw, points: Point[]) {
-        if (drawWith.brush) {
-            _api.brushDrawLines(this.id, drawWith.brush.id, drawWith.thickness, points);
-        }
+   
+    public DrawLines(drawWith: DrawWith, points: Point[]) {
+        _api.drawLines(this.id, drawWith, points);
     }
 
     public Fill(brush: BrushBase) {
-        _api.brushFill(this.id,brush.id);
+        _api.fill(this.id, brush.id);
     }
 
     public SetOutput(name: string = "") {
-        _api.setOutput(this.id,name);
+        _api.setOutput(this.id, name);
     }
 
-    public DrawImage(texture: JSImage, blend: BlendMode=BlendMode.Normal, percent: number=1, size?: Size, location: Point = { x: 0, y: 0 }) {
+    public DrawImage(texture: JSImage, blend: BlendMode = BlendMode.Normal, percent: number = 1, size?: Size, location: Point = { x: 0, y: 0 }) {
         let b: number = blend;
         size = (size) || texture.size;
         _api.drawImage(this.id, texture.id, b, percent, size, location);
     }
 
-    public DrawText(text: string, font: JSFont,brush:BrushBase,location:Point) {
-        _api.brushDrawText(this.id, text, font.id, brush.id, location);
+    public DrawText(text: string, font: JSFont, drawWith:DrawWith, location: Point) {
+        _api.drawText(this.id, text, font.id, drawWith, location);
     }
-    public DrawEclipse(drawWith:BrushDraw,location:Point,radius:number) {
-        _api.brushDrawEclipse(this.id, drawWith.brush.id,drawWith.thickness,location, radius);
+    public DrawEclipse(drawWith: DrawWith, location: Point, radius: number) {
+        _api.drawEclipse(this.id, drawWith, location, radius);
     }
 }

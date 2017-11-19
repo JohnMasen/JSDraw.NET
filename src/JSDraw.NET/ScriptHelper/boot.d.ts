@@ -3,7 +3,18 @@ declare abstract class idObject {
     readonly id: number;
     constructor(id: number);
 }
-declare abstract class BrushBase extends idObject {
+declare abstract class DrawWith extends idObject {
+    protected _thickness: number;
+    protected _type: DrawWithType;
+    constructor(id: number, thickness: number, type: DrawWithType);
+}
+declare abstract class BrushBase extends DrawWith {
+    Thickness: number;
+    constructor(id: number, thickness?: number);
+}
+declare enum DrawWithType {
+    brush = 0,
+    pen = 1,
 }
 declare enum BlendMode {
     Normal = 0,
@@ -42,10 +53,6 @@ interface Rectangle {
     width: number;
     height: number;
 }
-interface BrushDraw {
-    brush: BrushBase;
-    thickness: number;
-}
 declare class JSColor {
     readonly hexString: string;
     constructor(hex: string);
@@ -69,13 +76,10 @@ declare class JSImage extends idObject {
     static Create(width: number, height: number, isPersistent?: boolean): JSImage;
     readonly size: Size;
     private constructor();
-    DrawLines({brush: BrushBase, thickness: number}: {
-        brush: any;
-        thickness: any;
-    }, points: Point[]): any;
+    DrawLines(drawWith: DrawWith, points: Point[]): void;
     Fill(brush: BrushBase): void;
     SetOutput(name?: string): void;
     DrawImage(texture: JSImage, blend?: BlendMode, percent?: number, size?: Size, location?: Point): void;
-    DrawText(text: string, font: JSFont, brush: BrushBase, location: Point): void;
-    DrawEclipse(drawWith: BrushDraw, location: Point, radius: number): void;
+    DrawText(text: string, font: JSFont, drawWith: DrawWith, location: Point): void;
+    DrawEclipse(drawWith: DrawWith, location: Point, radius: number): void;
 }

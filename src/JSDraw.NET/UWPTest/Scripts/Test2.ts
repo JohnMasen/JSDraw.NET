@@ -13,12 +13,12 @@
         { x: 0, y: 0 },
         { x: 300, y: 100 }
     ];
-    img.DrawLines({ brush: brush_draw, thickness: 1 }, points);
+    img.DrawLines(brush_draw, points);
 
     JSFont.Install("Boogaloo-Regular.ttf");
     let f = new JSFont("Boogaloo", 24);
     img.DrawText("it works", f, brush_draw, { x: 100, y: 150 });
-    img.DrawEclipse({ brush: brush_draw, thickness:1 }, { x: 150, y: 200 }, 100);
+    img.DrawEclipse(brush_draw, { x: 150, y: 200 }, 100);
     img.SetOutput();
     
  }

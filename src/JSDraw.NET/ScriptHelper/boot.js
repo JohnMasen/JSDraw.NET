@@ -4,8 +4,25 @@ class idObject {
     }
 }
 ;
-class BrushBase extends idObject {
+class DrawWith extends idObject {
+    constructor(id, thickness, type) {
+        super(id);
+        this._thickness = thickness;
+        this._type = type;
+    }
 }
+class BrushBase extends DrawWith {
+    get Thickness() { return this._thickness; }
+    set Thickness(value) { this._thickness = value; }
+    constructor(id, thickness = 1) {
+        super(id, thickness, DrawWithType.brush);
+    }
+}
+var DrawWithType;
+(function (DrawWithType) {
+    DrawWithType[DrawWithType["brush"] = 0] = "brush";
+    DrawWithType[DrawWithType["pen"] = 1] = "pen";
+})(DrawWithType || (DrawWithType = {}));
 var BlendMode;
 (function (BlendMode) {
     //
@@ -135,12 +152,10 @@ class JSImage extends idObject {
         this.size = _api.getImageSize(id);
     }
     DrawLines(drawWith, points) {
-        if (drawWith.brush) {
-            _api.brushDrawLines(this.id, drawWith.brush.id, drawWith.thickness, points);
-        }
+        _api.drawLines(this.id, drawWith, points);
     }
     Fill(brush) {
-        _api.brushFill(this.id, brush.id);
+        _api.fill(this.id, brush.id);
     }
     SetOutput(name = "") {
         _api.setOutput(this.id, name);
@@ -150,11 +165,11 @@ class JSImage extends idObject {
         size = (size) || texture.size;
         _api.drawImage(this.id, texture.id, b, percent, size, location);
     }
-    DrawText(text, font, brush, location) {
-        _api.brushDrawText(this.id, text, font.id, brush.id, location);
+    DrawText(text, font, drawWith, location) {
+        _api.drawText(this.id, text, font.id, drawWith, location);
     }
     DrawEclipse(drawWith, location, radius) {
-        _api.brushDrawEclipse(this.id, drawWith.brush.id, drawWith.thickness, location, radius);
+        _api.drawEclipse(this.id, drawWith, location, radius);
     }
 }
 //# sourceMappingURL=boot.js.map

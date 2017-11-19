@@ -14,7 +14,24 @@ namespace JSDraw.NET
 {
     public partial class JSDrawAPI
     {
-
+        public enum DrawWithTypeEnum:int
+        {
+            Brush=0,
+            Pen=1
+        }
+        public struct DrawWith
+        {
+            public int Id;
+            public float Thickness;
+            public DrawWithTypeEnum Type;
+            public DrawWith(int id,float thickness,int type)
+            {
+                this.Id = id;
+                this.Thickness = thickness;
+                this.Type = (DrawWithTypeEnum)type;
+            }
+            
+        }
         public event EventHandler<OnLoadEventArgs<Stream>> OnLoadResource;
         public class ImgInfo
         {

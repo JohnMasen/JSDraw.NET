@@ -73,6 +73,20 @@ namespace JSDraw.NET
         private void injectJSConverter()
         {
             var converter = context.ServiceNode.GetService<IJSValueConverterService>();
+            converter.RegisterStructConverter<DrawWith>(
+                (jsvalue, value) =>
+                {
+                    jsvalue.WriteProperty<int>("id", value.Id);
+                    jsvalue.WriteProperty<float>("_thickness", value.Thickness);
+                    jsvalue.WriteProperty<int>("_type", (int)value.Type);
+                },
+                (jsvalue) =>
+                {
+                    int id = jsvalue.ReadProperty<int>("id");
+                    float thickness = jsvalue.ReadProperty<float>("_thickness");
+                    int type = jsvalue.ReadProperty<int>("_type");
+                    return new DrawWith(id, thickness, type);
+                });
 
             converter.RegisterStructConverter<PointF>(
                 (jsvalue, value) =>
@@ -149,16 +163,16 @@ namespace JSDraw.NET
                     binding.SetFunction<int, int, bool, int>("createImage", obj.CreateImage);
                     binding.SetFunction<string, bool, int>("loadImage", obj.LoadImage);
                     binding.SetFunction<string, int>("createSolidBrush", obj.CreateSolidBrush);
-                    binding.SetMethod<int,int>("brushFill", obj.BrushFill);
-                    binding.SetMethod<int, int, int, IEnumerable<PointF>>("brushDrawLines", obj.BrushDrawLines);
+                    binding.SetMethod<int,int>("fill", obj.Fill);
+                    binding.SetMethod<int, DrawWith, IEnumerable<PointF>>("drawLines", obj.DrawLines);
                     binding.SetMethod<int, string>("setOutput", obj.SetOutput);
                     binding.SetMethod<int, int, int, float, Size, Point>("drawImage", obj.DrawImage);
                     binding.SetFunction<int, Size>("getImageSize", obj.GetImageSize);
                     binding.SetMethod<string>("installFont", obj.InstallFont);
                     binding.SetFunction<string, float, int>("getFont", obj.GetFont);
                     binding.SetFunction<int,string, SizeF>("measureText", obj.MeasureText);
-                    binding.SetMethod<int, string, int, int, PointF>("brushDrawText", obj.BrushDrawText);
-                    binding.SetMethod<int, int, float,PointF, float>("brushDrawEclipse", obj.BrushDrawEclipse);
+                    binding.SetMethod<int, string, int, DrawWith, PointF>("drawText", obj.DrawText);
+                    binding.SetMethod<int, DrawWith,PointF, float>("drawEclipse", obj.DrawEclipse);
                 });
             
         }
