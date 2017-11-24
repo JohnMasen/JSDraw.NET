@@ -105,6 +105,14 @@ namespace JSDraw.NET
                    select item.Value as ManagedItem<Image<Rgba32>, ImgInfo>;
         }
 
+        public void Clear(bool keepPersistent)
+        {
+            if (!keepPersistent)
+            {
+                manager.Clear(keepPersistent);
+            }
+        }
+
         public void DrawImage(int imgId,int textureImageId,int blendMode,float percent,Size size, Point location)
         {
             withImage(imgId, ctx => ctx.DrawImage(getImage(textureImageId), (PixelBlenderMode)blendMode, percent, size, location));

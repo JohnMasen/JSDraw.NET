@@ -31,13 +31,16 @@ namespace JSDraw.NET
 
         public void Load(string script)
         {
-
+            api.Clear(false);
             //manager.ImagePath = WorkPath;
             initJSRuntime();
             injectJSConverter();
             initAPI();
             context.RunScript(script);
-            
+        }
+        public void ClearObjectList(bool keepPersistent=true)
+        {
+            api.Clear(keepPersistent);
         }
         //public IEnumerable<ImageManager.ImageBuffer> Output
         //{
