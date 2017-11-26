@@ -50,9 +50,9 @@ namespace JSDraw.NET
         //    }
         //}
 
-        public void Run()
+        public void Run(string entryPoint="main")
         {
-            context.GlobalObject.CallMethod("main");
+            context.GlobalObject.CallMethod(entryPoint);
         }
         
         public IEnumerable<ManagedItem<Image<Rgba32>, ImgInfo>> GetOutput()
