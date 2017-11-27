@@ -107,10 +107,7 @@ namespace JSDraw.NET
 
         public void Clear(bool keepPersistent)
         {
-            if (!keepPersistent)
-            {
-                manager.Clear(keepPersistent);
-            }
+            manager.Clear(keepPersistent);
         }
 
         public void DrawImage(int imgId,int textureImageId,int blendMode,float percent,Size size, Point location)
