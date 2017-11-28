@@ -5,6 +5,7 @@ using ChakraCore.NET;
 using SixLabors.Primitives;
 using SixLabors.ImageSharp;
 using static JSDraw.NET.JSDrawAPI;
+using System.Numerics;
 
 namespace JSDraw.NET
 {
@@ -91,6 +92,20 @@ namespace JSDraw.NET
                     return new DrawWith(id, thickness, type);
                 });
 
+            //converter.RegisterStructConverter<Vector2>(
+            //    (jsvalue, value) =>
+            //    {
+            //        jsvalue.WriteProperty("x", value.X);
+            //        jsvalue.WriteProperty("y", value.Y);
+            //    },
+            //    (jsvalue) =>
+            //    {
+            //        float x = jsvalue.ReadProperty<float>("x");
+            //        float y = jsvalue.ReadProperty<float>("y");
+            //        return new Vector2(x, y);
+            //    });
+            //converter.RegisterArrayConverter<Vector2>();
+
             converter.RegisterStructConverter<PointF>(
                 (jsvalue, value) =>
                 {
@@ -167,15 +182,22 @@ namespace JSDraw.NET
                     binding.SetFunction<string, bool, int>("loadImage", obj.LoadImage);
                     binding.SetFunction<string, int>("createSolidBrush", obj.CreateSolidBrush);
                     binding.SetMethod<int,int>("fill", obj.Fill);
-                    binding.SetMethod<int, DrawWith, IEnumerable<PointF>>("drawLines", obj.DrawLines);
+                    binding.SetMethod<int, DrawWith, IEnumerable<PointF>,int>("drawLines", obj.DrawLines);
                     binding.SetMethod<int, string>("setOutput", obj.SetOutput);
-                    binding.SetMethod<int, int, int, float, Size, Point>("drawImage", obj.DrawImage);
+                    binding.SetMethod<int, int, int, float, Size, Point,int>("drawImage", obj.DrawImage);
                     binding.SetFunction<int, Size>("getImageSize", obj.GetImageSize);
                     binding.SetMethod<string>("installFont", obj.InstallFont);
                     binding.SetFunction<string, float, int>("getFont", obj.GetFont);
                     binding.SetFunction<int,string, SizeF>("measureText", obj.MeasureText);
-                    binding.SetMethod<int, string, int, DrawWith, PointF>("drawText", obj.DrawText);
-                    binding.SetMethod<int, DrawWith,PointF, float>("drawEclipse", obj.DrawEclipse);
+                    binding.SetMethod<int, string, int, DrawWith, PointF,int>("drawText", obj.DrawText);
+                    binding.SetMethod<int, DrawWith,PointF, SizeF,int>("drawEclipse", obj.DrawEclipse);
+                    binding.SetFunction<int>("createMatrix", obj.CreateMatrix);
+                    binding.SetMethod<int,float, float>("matrixTranslation", obj.MatrixTranslation);
+                    binding.SetMethod<int, float, PointF>("matrixRotate", obj.MatrixRotate);
+                    binding.SetMethod<int, float, float>("matrixScale", obj.MatrixScale);
+                    binding.SetMethod<int>("matrixPush", obj.MatrixPush);
+                    binding.SetMethod<int>("matrixPop", obj.MatrixPop);
+                    binding.SetMethod<int>("matrixReset", obj.MatrixReset);
                 });
             
         }

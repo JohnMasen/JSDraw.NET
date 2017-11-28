@@ -140,6 +140,29 @@ class JSFont extends idObject {
         return _api.measureText(this.id, text);
     }
 }
+class JSMatrix extends idObject {
+    constructor() {
+        super(_api.createMatrix());
+    }
+    push() {
+        _api.matrixPush(this.id);
+    }
+    pop() {
+        _api.matrixPop(this.id);
+    }
+    translate(position) {
+        _api.matrixTranslation(this.id, position.x, position.y);
+    }
+    scale(size) {
+        _api.matrixScale(this.id, size.x, size.y);
+    }
+    rotate(degrees, center = { x: 0, y: 0 }) {
+        _api.matrixRotate(this.id, degrees, center);
+    }
+    reset() {
+        _api.matrixReset(this.id);
+    }
+}
 class JSImage extends idObject {
     static Load(path, isPersistent = false) {
         return new JSImage(_api.loadImage(path, isPersistent));
@@ -150,9 +173,10 @@ class JSImage extends idObject {
     constructor(id) {
         super(id);
         this.size = _api.getImageSize(id);
+        this.matrix = new JSMatrix();
     }
     DrawLines(drawWith, points) {
-        _api.drawLines(this.id, drawWith, points);
+        _api.drawLines(this.id, drawWith, points, this.matrix.id);
     }
     Fill(brush) {
         _api.fill(this.id, brush.id);
@@ -163,13 +187,13 @@ class JSImage extends idObject {
     DrawImage(texture, blend = BlendMode.Normal, percent = 1, size, location = { x: 0, y: 0 }) {
         let b = blend;
         size = (size) || texture.size;
-        _api.drawImage(this.id, texture.id, b, percent, size, location);
+        _api.drawImage(this.id, texture.id, b, percent, size, location, this.matrix.id);
     }
     DrawText(text, font, drawWith, location) {
-        _api.drawText(this.id, text, font.id, drawWith, location);
+        _api.drawText(this.id, text, font.id, drawWith, location, this.matrix.id);
     }
-    DrawEclipse(drawWith, location, radius) {
-        _api.drawEclipse(this.id, drawWith, location, radius);
+    DrawEclipse(drawWith, location, size) {
+        _api.drawEclipse(this.id, drawWith, location, size, this.matrix.id);
     }
 }
 //# sourceMappingURL=boot.js.map

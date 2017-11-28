@@ -166,8 +166,32 @@ class JSFont extends idObject {
         this.family = family;
         this.size = size;
     }
-    MeasureText(text: string): Size {
+    public MeasureText(text: string): Size {
         return _api.measureText(this.id, text);
+    }
+}
+
+class JSMatrix extends idObject {
+    constructor() {
+        super(_api.createMatrix());
+    }
+    public push() {
+        _api.matrixPush(this.id);
+    }
+    public pop() {
+        _api.matrixPop(this.id);
+    }
+    public translate(position:Point) {
+        _api.matrixTranslation(this.id, position.x, position.y);
+    }
+    public scale(size: Point) {
+        _api.matrixScale(this.id, size.x, size.y);
+    }
+    public rotate(degrees: number, center: Point = { x: 0, y: 0 }) {
+        _api.matrixRotate(this.id, degrees,center);
+    }
+    public reset() {
+        _api.matrixReset(this.id);
     }
 }
 
@@ -180,15 +204,17 @@ class JSImage extends idObject {
     }
 
     public readonly size: Size;
+    public readonly matrix: JSMatrix;
 
     private constructor(id: number) {
         super(id);
         this.size = _api.getImageSize(id);
+        this.matrix = new JSMatrix();
     }
 
    
     public DrawLines(drawWith: DrawWith, points: Point[]) {
-        _api.drawLines(this.id, drawWith, points);
+        _api.drawLines(this.id, drawWith, points,this.matrix.id);
     }
 
     public Fill(brush: BrushBase) {
@@ -202,13 +228,13 @@ class JSImage extends idObject {
     public DrawImage(texture: JSImage, blend: BlendMode = BlendMode.Normal, percent: number = 1, size?: Size, location: Point = { x: 0, y: 0 }) {
         let b: number = blend;
         size = (size) || texture.size;
-        _api.drawImage(this.id, texture.id, b, percent, size, location);
+        _api.drawImage(this.id, texture.id, b, percent, size, location, this.matrix.id);
     }
 
     public DrawText(text: string, font: JSFont, drawWith:DrawWith, location: Point) {
-        _api.drawText(this.id, text, font.id, drawWith, location);
+        _api.drawText(this.id, text, font.id, drawWith, location, this.matrix.id);
     }
-    public DrawEclipse(drawWith: DrawWith, location: Point, radius: number) {
-        _api.drawEclipse(this.id, drawWith, location, radius);
+    public DrawEclipse(drawWith: DrawWith, location: Point, size:Size) {
+        _api.drawEclipse(this.id, drawWith, location, size, this.matrix.id);
     }
 }

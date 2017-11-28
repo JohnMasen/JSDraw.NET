@@ -7,7 +7,7 @@ namespace JSDraw.NET
     public class ManagedItem<T,TTag>:IManaged<TTag>
     {
         public int ID { get; private set; }
-        public T Item { get; private set; }
+        public T Item { get; set; }
         public bool IsPersistent { get; set; }
         public TTag Tag { get; set; }
         public ManagedItem(int id,T obj,bool isPersistent, TTag tag)

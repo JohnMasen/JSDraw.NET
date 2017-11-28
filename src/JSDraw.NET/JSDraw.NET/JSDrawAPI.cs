@@ -110,8 +110,10 @@ namespace JSDraw.NET
             manager.Clear(keepPersistent);
         }
 
-        public void DrawImage(int imgId,int textureImageId,int blendMode,float percent,Size size, Point location)
+        public void DrawImage(int imgId,int textureImageId,int blendMode,float percent,Size size, Point location,int matrixID)
         {
+            size = transformByMatrix(matrixID, size);
+            location = transformByMatrix(matrixID, location);
             withImage(imgId, ctx => ctx.DrawImage(getImage(textureImageId), (PixelBlenderMode)blendMode, percent, size, location));
         }
 
