@@ -195,5 +195,8 @@ class JSImage extends idObject {
     DrawEclipse(drawWith, location, size) {
         _api.drawEclipse(this.id, drawWith, location, size, this.matrix.id);
     }
+    DrawPolygon(drawWith, points) {
+        _api.drawPolygon(this.id, drawWith, points, this.matrix.id);
+    }
 }
 //# sourceMappingURL=boot.js.map

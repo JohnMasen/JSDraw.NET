@@ -191,6 +191,7 @@ namespace JSDraw.NET
                     binding.SetFunction<int,string, SizeF>("measureText", obj.MeasureText);
                     binding.SetMethod<int, string, int, DrawWith, PointF,int>("drawText", obj.DrawText);
                     binding.SetMethod<int, DrawWith,PointF, SizeF,int>("drawEclipse", obj.DrawEclipse);
+                    binding.SetMethod<int, DrawWith, IEnumerable<PointF>, int>("drawPolygon", obj.DrawPolygon);
                     binding.SetFunction<int>("createMatrix", obj.CreateMatrix);
                     binding.SetMethod<int,float, float>("matrixTranslation", obj.MatrixTranslation);
                     binding.SetMethod<int, float, PointF>("matrixRotate", obj.MatrixRotate);

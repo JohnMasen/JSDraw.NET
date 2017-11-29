@@ -92,4 +92,5 @@ declare class JSImage extends idObject {
     DrawImage(texture: JSImage, blend?: BlendMode, percent?: number, size?: Size, location?: Point): void;
     DrawText(text: string, font: JSFont, drawWith: DrawWith, location: Point): void;
     DrawEclipse(drawWith: DrawWith, location: Point, size: Size): void;
+    DrawPolygon(drawWith: DrawWith, points: Point[]): void;
 }

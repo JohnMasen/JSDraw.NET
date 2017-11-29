@@ -21,9 +21,9 @@
     //img.DrawText("it works", f, brush_draw, { x: 100, y: 150 });
     //img.DrawEclipse(brush_draw, { x: 150, y: 200 }, { width: 100, height: 100 });
 
-    drawClock(img, brush_draw);
+    test2(img, brush_draw);
     img.SetOutput();
-    
+
 }
 
 function test1(img: JSImage, d: DrawWith) {
@@ -41,8 +41,21 @@ function test1(img: JSImage, d: DrawWith) {
     img.matrix.pop();
 
 }
+function test2(img: JSImage, d: DrawWith) {
+    nestDraw(img, () => {
+        img.matrix.rotate(10);
+        img.matrix.scale({ x: 1.1, y: 1.1 });
+        img.matrix.translate({ x: 40, y: 40 });
+        img.DrawPolygon(d, [
+            { x: -10, y: -10 },
+            { x: 10, y: -10 },
+            { x: 10, y: 10 },
+            { x: -10, y: 10 }
+        ])
+    }, 10);
+}
 
-function drawClock(img: JSImage,d:DrawWith) {
+function drawClock(img: JSImage, d: DrawWith) {
     img.matrix.push();
     //img.DrawEclipse(d, { x: 0, y: 0 }, { width: 10, height: 10 });
     img.matrix.translate({ x: img.size.width / 2, y: img.size.height / 2 });
@@ -51,10 +64,22 @@ function drawClock(img: JSImage,d:DrawWith) {
         img.matrix.push();
         img.matrix.translate({ x: 0, y: 100 });
         img.matrix.rotate(i * 36);
-        
+
         img.matrix.scale({ x: 2, y: 2 });
         img.DrawLines(d, [{ x: 0, y: 0 }, { x: 0, y: - 20 }]);
         img.matrix.pop();
     }
     img.matrix.pop();
+}
+
+function nestDraw(img: JSImage, action: Function, count: number) {
+    if (count == 0) {
+        return;
+    }
+    img.matrix.push();
+    action();
+    nestDraw(img, action, count - 1);
+    img.matrix.pop();
+    
+
 }

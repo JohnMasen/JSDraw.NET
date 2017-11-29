@@ -1,9 +1,9 @@
 function main() {
-    let img = JSImage.Create(640, 480, false);
-    let background = new JSColor("#000000");
-    let foreground = new JSColor("#ffffff");
-    let brush_background = JSBrush.createSolid(background);
-    let brush_draw = JSBrush.createSolid(foreground);
+    var img = JSImage.Create(640, 480, false);
+    var background = new JSColor("#000000");
+    var foreground = new JSColor("#ffffff");
+    var brush_background = JSBrush.createSolid(background);
+    var brush_draw = JSBrush.createSolid(foreground);
     brush_draw.Thickness = 4;
     img.Fill(brush_background);
     //let texture = JSImage.Load("arrow.jpg");
@@ -17,7 +17,7 @@ function main() {
     //let f = new JSFont("Boogaloo", 24);
     //img.DrawText("it works", f, brush_draw, { x: 100, y: 150 });
     //img.DrawEclipse(brush_draw, { x: 150, y: 200 }, { width: 100, height: 100 });
-    drawClock(img, brush_draw);
+    test2(img, brush_draw);
     img.SetOutput();
 }
 function test1(img, d) {
@@ -32,6 +32,19 @@ function test1(img, d) {
     img.matrix.pop();
     img.matrix.pop();
 }
+function test2(img, d) {
+    nestDraw(img, function () {
+        img.matrix.rotate(10);
+        img.matrix.scale({ x: 1.1, y: 1.1 });
+        img.matrix.translate({ x: 40, y: 40 });
+        img.DrawPolygon(d, [
+            { x: -10, y: -10 },
+            { x: 10, y: -10 },
+            { x: 10, y: 10 },
+            { x: -10, y: 10 }
+        ]);
+    }, 10);
+}
 function drawClock(img, d) {
     img.matrix.push();
     //img.DrawEclipse(d, { x: 0, y: 0 }, { width: 10, height: 10 });
@@ -45,6 +58,15 @@ function drawClock(img, d) {
         img.DrawLines(d, [{ x: 0, y: 0 }, { x: 0, y: -20 }]);
         img.matrix.pop();
     }
+    img.matrix.pop();
+}
+function nestDraw(img, action, count) {
+    if (count == 0) {
+        return;
+    }
+    img.matrix.push();
+    action();
+    nestDraw(img, action, count - 1);
     img.matrix.pop();
 }
 //# sourceMappingURL=Test2.js.map

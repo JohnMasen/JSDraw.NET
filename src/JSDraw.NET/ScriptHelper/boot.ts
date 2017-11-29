@@ -237,4 +237,9 @@ class JSImage extends idObject {
     public DrawEclipse(drawWith: DrawWith, location: Point, size:Size) {
         _api.drawEclipse(this.id, drawWith, location, size, this.matrix.id);
     }
+
+    public DrawPolygon(drawWith: DrawWith, points: Point[]) {
+        _api.drawPolygon(this.id, drawWith, points, this.matrix.id);
+    }
+
 }
