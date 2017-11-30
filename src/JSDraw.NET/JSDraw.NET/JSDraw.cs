@@ -15,6 +15,14 @@ namespace JSDraw.NET
         ChakraContext context;
         public string WorkPath { get; set; } = null;
         JSDrawAPI api = new JSDrawAPI();
+        public ChakraContext Context
+        {
+            get
+            {
+                return context;
+            }
+        }
+
         public JSDraw()
         {
             api.OnLoadResource += Api_OnLoadResource;
