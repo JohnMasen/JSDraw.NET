@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>0.3.3-alpha</Version>
+    <Version>0.3.4-alpha</Version>
     <PackageProjectUrl>https://github.com/JohnMasen/JSDraw.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/JohnMasen/JSDraw.NET</RepositoryUrl>
-    <PackageReleaseNotes>expose chakra context</PackageReleaseNotes>
+    <PackageReleaseNotes>add fillPolygon,fillEclipse
+add setAA</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

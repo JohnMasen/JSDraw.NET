@@ -20,10 +20,17 @@
     //let f = new JSFont("Boogaloo", 24);
     //img.DrawText("it works", f, brush_draw, { x: 100, y: 150 });
     //img.DrawEclipse(brush_draw, { x: 150, y: 200 }, { width: 100, height: 100 });
-
+    test1(img, brush_draw);
     test2(img, brush_draw);
+    test3(img, brush_draw);
     img.SetOutput();
 
+}
+function test3(img: JSImage, b: JSBrush) {
+    setAA(false);
+    img.FillEclipse(b, { x: 300, y: 300 }, { width: 100, height: 50 });
+    img.FillPolygon(b, [{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 0, y: 100 }]);
+    setAA(true);
 }
 
 function test1(img: JSImage, d: DrawWith) {

@@ -47,7 +47,20 @@ namespace JSDraw.NET
                 Path = path;
             }
         }
+        private bool isAAEnabled = false;
 
+        private GraphicsOptions createGraphicsOptions(PixelBlenderMode blendmode,float percent)
+        {
+            return new GraphicsOptions(isAAEnabled) { BlenderMode = blendmode, BlendPercentage = percent };
+        }
+        private GraphicsOptions createGraphicsOptions()
+        {
+            return createGraphicsOptions(PixelBlenderMode.Normal, 1f);
+        }
+        public void SetAA(bool isEnabled)
+        {
+            isAAEnabled = isEnabled;
+        }
         
         private Stream loadResource(string path)
         {
@@ -114,7 +127,7 @@ namespace JSDraw.NET
         {
             size = transformByMatrix(matrixID, size);
             location = transformByMatrix(matrixID, location);
-            withImage(imgId, ctx => ctx.DrawImage(getImage(textureImageId), (PixelBlenderMode)blendMode, percent, size, location));
+            withImage(imgId, ctx => ctx.DrawImage(getImage(textureImageId), size, location,createGraphicsOptions((PixelBlenderMode)blendMode,percent)));
         }
 
         public Size GetImageSize(int id)

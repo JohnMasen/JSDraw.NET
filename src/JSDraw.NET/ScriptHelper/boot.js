@@ -11,13 +11,6 @@ class DrawWith extends idObject {
         this._type = type;
     }
 }
-class BrushBase extends DrawWith {
-    get Thickness() { return this._thickness; }
-    set Thickness(value) { this._thickness = value; }
-    constructor(id, thickness = 1) {
-        super(id, thickness, DrawWithType.brush);
-    }
-}
 var DrawWithType;
 (function (DrawWithType) {
     DrawWithType[DrawWithType["brush"] = 0] = "brush";
@@ -111,17 +104,25 @@ var BlendMode;
     //     clear where they overlap
     BlendMode[BlendMode["Xor"] = 20] = "Xor";
 })(BlendMode || (BlendMode = {}));
+function setAA(isEnabled) {
+    _api.setAA(isEnabled);
+}
 class JSColor {
     constructor(hex) {
         this.hexString = hex;
     }
 }
-class JSBrush extends idObject {
+class JSBrush extends DrawWith {
+    get Thickness() { return this._thickness; }
+    set Thickness(value) { this._thickness = value; }
+    constructor(id, thickness = 1) {
+        super(id, thickness, DrawWithType.brush);
+    }
     static createSolid(color) {
         return new JSSolidBrush(color);
     }
 }
-class JSSolidBrush extends BrushBase {
+class JSSolidBrush extends JSBrush {
     constructor(color) {
         super(_api.createSolidBrush(color.hexString));
         this.color = color;
@@ -195,8 +196,14 @@ class JSImage extends idObject {
     DrawEclipse(drawWith, location, size) {
         _api.drawEclipse(this.id, drawWith, location, size, this.matrix.id);
     }
+    FillEclipse(brush, location, size) {
+        _api.fillEclipse(this.id, brush.id, location, size, this.matrix.id);
+    }
     DrawPolygon(drawWith, points) {
         _api.drawPolygon(this.id, drawWith, points, this.matrix.id);
+    }
+    FillPolygon(brush, points) {
+        _api.fillPolygon(this.id, brush.id, points, this.matrix.id);
     }
 }
 //# sourceMappingURL=boot.js.map

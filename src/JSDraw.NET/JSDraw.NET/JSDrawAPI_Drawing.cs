@@ -19,13 +19,13 @@ namespace JSDraw.NET
         }
         private IBrush<Rgba32> getBrush(DrawWith d)
         {
-            if (d.Type==DrawWithTypeEnum.Brush)
+            if (d.Type == DrawWithTypeEnum.Brush)
             {
                 return getBrush(d.Id);
             }
             else
             {
-                throw new ArgumentException("getBrush requires a brush type DrawWith parameter",nameof(d));
+                throw new ArgumentException("getBrush requires a brush type DrawWith parameter", nameof(d));
             }
         }
 
@@ -51,7 +51,7 @@ namespace JSDraw.NET
             return add<IBrush<Rgba32>>(result);
         }
 
-        public void DrawLines(int imgId,DrawWith d, IEnumerable<PointF> points,int matrixID)
+        public void DrawLines(int imgId, DrawWith d, IEnumerable<PointF> points, int matrixID)
         {
             var p = transformByMatrix(matrixID, points);
             withImage(imgId,
@@ -60,10 +60,10 @@ namespace JSDraw.NET
                         switch (d.Type)
                         {
                             case DrawWithTypeEnum.Brush:
-                                ctx.DrawLines(getBrush(d), d.Thickness, p);
+                                ctx.DrawLines(getBrush(d), d.Thickness, p, createGraphicsOptions());
                                 break;
                             case DrawWithTypeEnum.Pen:
-                                ctx.DrawLines(getPen(d), p);
+                                ctx.DrawLines(getPen(d), p, createGraphicsOptions());
                                 break;
                             default:
                                 break;
@@ -76,50 +76,72 @@ namespace JSDraw.NET
             withImage(imgId, ctx =>
             {
                 ctx.Fill(getBrush(brushID));
-             }
+            }
             );
         }
-        
-        public void DrawEclipse(int imgID, DrawWith d, PointF position,SizeF size,int matrixID)
+
+        public void DrawEclipse(int imgID, DrawWith d, PointF position, SizeF size, int matrixID)
         {
             position = transformByMatrix(matrixID, position);
             size = transformByMatrix(matrixID, size);
-            withImage(imgID, ctx => 
+            withImage(imgID, ctx =>
             {
                 switch (d.Type)
                 {
                     case DrawWithTypeEnum.Brush:
-                        ctx.Draw(getBrush(d), d.Thickness, new SixLabors.Shapes.EllipsePolygon(position, size));
+                        ctx.Draw(getBrush(d), d.Thickness, new SixLabors.Shapes.EllipsePolygon(position, size), createGraphicsOptions());
                         break;
                     case DrawWithTypeEnum.Pen:
-                        ctx.Draw(getPen(d), new SixLabors.Shapes.EllipsePolygon(position, size));
+                        ctx.Draw(getPen(d), new SixLabors.Shapes.EllipsePolygon(position, size), createGraphicsOptions());
                         break;
                     default:
                         break;
                 }
-                
+
             });
         }
 
-        public void DrawPolygon(int imgID,DrawWith d,IEnumerable<PointF> points,int matrixID)
+        public void DrawPolygon(int imgID, DrawWith d, IEnumerable<PointF> points, int matrixID)
         {
-            var p = transformByMatrix(matrixID,points);
+            var p = transformByMatrix(matrixID, points);
             withImage(imgID,
                 ctx =>
                 {
                     switch (d.Type)
                     {
                         case DrawWithTypeEnum.Brush:
-                            ctx.DrawPolygon(getBrush(d.Id), d.Thickness, p);
+                            ctx.DrawPolygon(getBrush(d.Id), d.Thickness, p, createGraphicsOptions());
                             break;
                         case DrawWithTypeEnum.Pen:
-                            ctx.DrawPolygon(getPen(d.Id), p);
+                            ctx.DrawPolygon(getPen(d.Id), p, createGraphicsOptions());
                             break;
                         default:
                             break;
                     }
                 }
                 );
+        }
+
+        public void FillPolygon(int imgID, int brushID, IEnumerable<PointF> points, int matrixID)
+        {
+            var p = transformByMatrix(matrixID, points);
+            withImage(imgID,
+                ctx =>
+                {
+                    ctx.FillPolygon(getBrush(brushID), p, createGraphicsOptions());
+                }
+                );
+        }
+
+        public void FillEclipse(int imgID, int brushID, PointF position, SizeF size, int matrixID)
+        {
+            position = transformByMatrix(matrixID, position);
+            size = transformByMatrix(matrixID, size);
+            withImage(imgID, ctx =>
+            {
+                ctx.Fill(getBrush(brushID), new SixLabors.Shapes.EllipsePolygon(position, size), createGraphicsOptions());
+
+            });
         }
     }
 }

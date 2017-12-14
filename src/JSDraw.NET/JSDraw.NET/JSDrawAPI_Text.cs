@@ -17,10 +17,10 @@ namespace JSDraw.NET
                 switch (d.Type)
                 {
                     case DrawWithTypeEnum.Brush:
-                        ctx.DrawText(text, GetFont(fontID), getBrush(d), location);
+                        ctx.DrawText(text, GetFont(fontID), getBrush(d), location, createGraphicsOptions());
                         break;
                     case DrawWithTypeEnum.Pen:
-                        ctx.DrawText(text, GetFont(fontID), getPen(d), location);
+                        ctx.DrawText(text, GetFont(fontID), getPen(d), location, createGraphicsOptions());
                         break;
                     default:
                         break;

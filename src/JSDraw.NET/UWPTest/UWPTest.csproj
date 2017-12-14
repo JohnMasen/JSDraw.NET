@@ -162,6 +162,7 @@
     <TypeScriptCompile Include="..\ScriptHelper\boot.d.ts">
       <Link>Scripts\boot.d.ts</Link>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Test2.ts" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

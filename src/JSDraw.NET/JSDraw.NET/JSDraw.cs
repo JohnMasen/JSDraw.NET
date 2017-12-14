@@ -189,6 +189,7 @@ namespace JSDraw.NET
                     binding.SetFunction<int, int, bool, int>("createImage", obj.CreateImage);
                     binding.SetFunction<string, bool, int>("loadImage", obj.LoadImage);
                     binding.SetFunction<string, int>("createSolidBrush", obj.CreateSolidBrush);
+                    binding.SetMethod<bool>("setAA", obj.SetAA);
                     binding.SetMethod<int,int>("fill", obj.Fill);
                     binding.SetMethod<int, DrawWith, IEnumerable<PointF>,int>("drawLines", obj.DrawLines);
                     binding.SetMethod<int, string>("setOutput", obj.SetOutput);
@@ -199,7 +200,9 @@ namespace JSDraw.NET
                     binding.SetFunction<int,string, SizeF>("measureText", obj.MeasureText);
                     binding.SetMethod<int, string, int, DrawWith, PointF,int>("drawText", obj.DrawText);
                     binding.SetMethod<int, DrawWith,PointF, SizeF,int>("drawEclipse", obj.DrawEclipse);
+                    binding.SetMethod<int, int, PointF, SizeF, int>("fillEclipse", obj.FillEclipse);
                     binding.SetMethod<int, DrawWith, IEnumerable<PointF>, int>("drawPolygon", obj.DrawPolygon);
+                    binding.SetMethod<int, int, IEnumerable<PointF>, int>("fillPolygon", obj.FillPolygon);
                     binding.SetFunction<int>("createMatrix", obj.CreateMatrix);
                     binding.SetMethod<int,float, float>("matrixTranslation", obj.MatrixTranslation);
                     binding.SetMethod<int, float, PointF>("matrixRotate", obj.MatrixRotate);

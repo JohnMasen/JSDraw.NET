@@ -16,13 +16,7 @@ abstract class DrawWith extends idObject {
     }
 }
 
-abstract class BrushBase extends DrawWith {
-    get Thickness(): number { return this._thickness }
-    set Thickness(value: number) {this._thickness=value}
-    constructor(id: number, thickness: number = 1) {
-        super(id, thickness,  DrawWithType.brush);
-    }
-}
+
 
 enum DrawWithType {
     brush = 0,
@@ -134,7 +128,9 @@ interface Rectangle {
     height: number;
 }
 
-
+function setAA(isEnabled: boolean) {
+    _api.setAA(isEnabled);
+}
 class JSColor {
     readonly hexString: string;
     constructor(hex: string) {
@@ -143,12 +139,17 @@ class JSColor {
 
 }
 
-class JSBrush extends idObject {
+abstract class JSBrush extends DrawWith {
+    get Thickness(): number { return this._thickness }
+    set Thickness(value: number) { this._thickness = value }
+    constructor(id: number, thickness: number = 1) {
+        super(id, thickness, DrawWithType.brush);
+    }
     public static createSolid(color: JSColor): JSSolidBrush {
         return new JSSolidBrush(color);
     }
 }
-class JSSolidBrush extends BrushBase {
+class JSSolidBrush extends JSBrush {
     public readonly color: JSColor;
     constructor(color: JSColor) {
         super(_api.createSolidBrush(color.hexString));
@@ -217,7 +218,7 @@ class JSImage extends idObject {
         _api.drawLines(this.id, drawWith, points,this.matrix.id);
     }
 
-    public Fill(brush: BrushBase) {
+    public Fill(brush:JSBrush) {
         _api.fill(this.id, brush.id);
     }
 
@@ -237,9 +238,16 @@ class JSImage extends idObject {
     public DrawEclipse(drawWith: DrawWith, location: Point, size:Size) {
         _api.drawEclipse(this.id, drawWith, location, size, this.matrix.id);
     }
+    public FillEclipse(brush:JSBrush, location: Point, size: Size) {
+        _api.fillEclipse(this.id, brush.id, location, size, this.matrix.id);
+    }
 
     public DrawPolygon(drawWith: DrawWith, points: Point[]) {
         _api.drawPolygon(this.id, drawWith, points, this.matrix.id);
+    }
+
+    public FillPolygon(brush: JSBrush, points: Point[]) {
+        _api.fillPolygon(this.id, brush.id, points, this.matrix.id);
     }
 
 }
