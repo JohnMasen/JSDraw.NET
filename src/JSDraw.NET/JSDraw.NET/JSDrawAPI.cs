@@ -47,7 +47,7 @@ namespace JSDraw.NET
                 Path = path;
             }
         }
-        private bool isAAEnabled = false;
+        private bool isAAEnabled = true;
 
         private GraphicsOptions createGraphicsOptions(PixelBlenderMode blendmode,float percent)
         {
