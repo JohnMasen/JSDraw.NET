@@ -125,7 +125,7 @@ namespace JSDraw.NET
 
         public void DrawImage(int imgId,int textureImageId,int blendMode,float percent,Size size, Point location,int matrixID)
         {
-            size = transformByMatrix(matrixID, size);
+            //size = transformByMatrix(matrixID, size);
             location = transformByMatrix(matrixID, location);
             withImage(imgId, ctx => ctx.DrawImage(getImage(textureImageId), size, location,createGraphicsOptions((PixelBlenderMode)blendMode,percent)));
         }
